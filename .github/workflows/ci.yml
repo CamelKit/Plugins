@@ -1,14 +1,18 @@
-name: Build & Verify Official Plugins
+name: Build & Publish Official Plugins
 
 on:
   push:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  build:
-    name: Typecheck & Bundle Plugins
+  build-and-publish:
+    name: Typecheck, Guard, Bundle & Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,9 +27,28 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Anti-bot security guard
+        run: node scripts/guard-input-fabrication.mjs
+
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Build all plugin bundles
         run: pnpm build
 
+      - name: Generate official plugin manifest
+        run: node scripts/build-manifest.mjs
+
+      - name: Publish bundles & manifest to dist branch
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          cd dist-publish
+          git init -b dist
+          git config user.name "CamelKit Bot"
+          git config user.email "bot@camelkit.dev"
+          git add -A
+          git commit -m "chore(dist): publish official plugins @ ${GITHUB_SHA::8}"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
