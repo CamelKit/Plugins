@@ -1,0 +1,25 @@
+{
+  "name": "camelkit-loot-tracker",
+  "version": "1.0.0",
+  "description": "Tracks monster kills, aggregates session drops and GP values, and crowdsources drop rates to the EvilQuest Wiki.",
+  "type": "module",
+  "license": "GPL-3.0-only",
+  "author": "CamelKit",
+  "main": "src/index.ts",
+  "camelkit": {
+    "pluginName": "Loot Tracker",
+    "bundleName": "LootTrackerPlugin.js"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@camelkit/core": "^0.1.0",
+    "esbuild": "^0.25.8",
+    "typescript": "^5.9.2"
+  }
+}
+

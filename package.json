@@ -1,0 +1,30 @@
+{
+  "name": "@camelkit/plugins",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Official CamelKit Plugins Monorepo",
+  "license": "GPL-3.0-only",
+  "author": "CamelKit Team",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CamelKit/Plugins.git"
+  },
+  "packageManager": "pnpm@12.4.1",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "typecheck": "turbo typecheck",
+    "sync": "pnpm run build && node scripts/sync-to-client.mjs",
+    "clean": "turbo clean"
+  },
+  "devDependencies": {
+    "@camelkit/core": "^0.1.0",
+    "esbuild": "^0.25.8",
+    "turbo": "^2.10.12",
+    "typescript": "^5.9.2"
+  }
+}
+
